@@ -5,6 +5,9 @@ const { CacheableResponsePlugin } = require('workbox-cacheable-response');
 const { ExpirationPlugin } = require('workbox-expiration');
 const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
 
+// checks the cache for a response, returns it if found.
+const { StaleWhileRevalidate } = require('workbox-strategies');
+
 precacheAndRoute(self.__WB_MANIFEST);
 
 const pageCache = new CacheFirst({
@@ -27,4 +30,17 @@ warmStrategyCache({
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // TODO: Implement asset caching
-registerRoute();
+registerRoute(
+  // callback function to filter the requests we want to cache
+  (({ request }) => ['style', 'scrpt', 'worker'].includes(request.destination),
+  new StaleWhileRevalidate({
+    cacheName: 'asset-cache',
+    plugins: [
+      // plugin to cache responses at a max age of 30 days
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      })
+    ]
+  })
+  )
+);
