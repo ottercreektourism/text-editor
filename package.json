@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/ottercreektourism/text-editor/issues"
   },
-  "homepage": "https://github.com/ottercreektourism/text-editor#readme"
+  "homepage": "https://github.com/ottercreektourism/text-editor#readme",
+  "dependencies": {
+    "webpack": "^5.72.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.2"
+  }
 }
